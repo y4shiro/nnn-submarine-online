@@ -7,15 +7,10 @@ router.get('/', function(req, res, next) {
   let displayName = 'anonymous';
   let thumbUrl = 'anonymous';
   if (req.user) {
-    displayName = req.user.displayName;
-    thumbUrl = req.user.photos[0].value;
+     displayName = req.user.displayName;
+     thumbUrl = req.user.photos[0].value;
   }
-  res.render('game', {
-    title: '潜水艦ゲーム',
-    displayName: displayName,
-    thumbUrl: thumbUrl,
-    ipAdress: config.ipAddress
-  });
+  res.render('game', { title: '潜水艦ゲーム', displayName: displayName, thumbUrl: thumbUrl, ipAddress: config.ipAddress });
 });
 
 module.exports = router;
