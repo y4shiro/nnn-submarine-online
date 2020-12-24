@@ -140,4 +140,6 @@ tags
 # Persistent undo
 [._]*.un~
 
+# secret files
+config.js
 
