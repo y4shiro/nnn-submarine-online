@@ -26,7 +26,6 @@ function newConnection(socketId, displayName, thumbUrl) {
   const playerY = Math.floor(Math.random() * gameObj.fieldHeight);
   const playerId = crypto.createHash('sha1').update(socketId).digest('hex');
 
-
   const playerObj = {
     x: playerX,
     y: playerY,

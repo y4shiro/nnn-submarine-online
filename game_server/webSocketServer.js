@@ -7,7 +7,7 @@ function createWebSocketServer(io, game) {
 
     console.log('WebSocket のコネクションがありました。');
     socket.emit('start data', {});
-    const startObj = game.newConnection(socket.io, displayName, thumbUrl);
+    const startObj = game.newConnection(socket.id, displayName, thumbUrl);
     socket.emit('start data', startObj);
 
     socket.on('disconnect', () => {
