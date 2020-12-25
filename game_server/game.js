@@ -19,12 +19,13 @@ function init() {
     addAir();
   }
 }
-init(); // 初期化(初期化はサーバー起動時に行う)
+init(); // 初期化（初期化はサーバー起動時に行う）
 
 function newConnection(socketId, displayName, thumbUrl) {
   const playerX = Math.floor(Math.random() * gameObj.fieldWidth);
   const playerY = Math.floor(Math.random() * gameObj.fieldHeight);
   const playerId = crypto.createHash('sha1').update(socketId).digest('hex');
+
 
   const playerObj = {
     x: playerX,
@@ -36,7 +37,7 @@ function newConnection(socketId, displayName, thumbUrl) {
     direction: 'right',
     score: 0
   };
-  gameObje.playersMap.set(socketId, playerObj);
+  gameObj.playersMap.set(socketId, playerObj);
 
   const startObj = {
     playerObj: playerObj,
@@ -92,7 +93,7 @@ function disconnect(socketId) {
 
 function addItem() {
   const itemX = Math.floor(Math.random() * gameObj.fieldWidth);
-  const itemy = Math.floor(Math.random() * gameObj.fieldHeight);
+  const itemY = Math.floor(Math.random() * gameObj.fieldHeight);
   const itemKey = `${itemX},${itemY}`;
 
   if (gameObj.itemsMap.has(itemKey)) { // アイテムの位置が被ってしまった場合は
@@ -101,7 +102,7 @@ function addItem() {
 
   const itemObj = {
     x: itemX,
-    y: itemY
+    y: itemY,
   };
   gameObj.itemsMap.set(itemKey, itemObj);
 }
@@ -117,9 +118,8 @@ function addAir() {
 
   const airObj = {
     x: airX,
-    y: airY
+    y: airY,
   };
-
   gameObj.airMap.set(airKey, airObj);
 }
 
