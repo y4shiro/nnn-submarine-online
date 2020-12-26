@@ -15,7 +15,7 @@ function createWebSocketServer(io, game) {
     });
 
     socket.on('missile emit', (direction) => {
-      game.missileEmit(socket, direction);
+      game.missileEmit(socket.id, direction);
     });
 
     socket.on('disconnect', () => {

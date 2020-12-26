@@ -32,6 +32,7 @@ init(); // 初期化（初期化はサーバー起動時に行う）
 
 const gameTicker = setInterval(() => {
   movePlayers(gameObj.playersMap); // 潜水艦の移動
+  moveMissile(gameObj.flyingMissilesMap); // ミサイルの移動
   checkGetItem(gameObj.playersMap, gameObj.itemsMap, gameObj.airMap, gameObj.flyingMissilesMap); // アイテムの取得チェック
 }, 33);
 
@@ -155,12 +156,10 @@ function checkGetItem(playersMap, itemsMap, airMap, flyingMissilesMap) {
       }
     }
 
-    // うち放たれているミサイル
+    // 撃ち放たれているミサイル
     for (let [missileId, flyingMissile] of flyingMissilesMap) {
       const distanceObj = calculationBetweenTwoPoints(
-        playerObj.x, playerObj.y,
-        flyingMissile.x, flyingMissile.y,
-        gameObj.fieldWidth, gameObj.fieldHeight
+        playerObj.x, playerObj.y, flyingMissile.x, flyingMissile.y, gameObj.fieldWidth, gameObj.fieldHeight
       );
 
       if (
@@ -169,7 +168,7 @@ function checkGetItem(playersMap, itemsMap, airMap, flyingMissilesMap) {
         playerObj.playerId !== flyingMissile.emitPlayerId
       ) {
         playerObj.isAlive = false;
-        flyingMissilesMap.delete(missileId); // ミサイルの削除
+        flyingMissilesMap.delete(missileId); // ミサイル（魚雷）の削除
       }
     }
   }
@@ -270,14 +269,11 @@ function missileEmit(socketId, direction) {
 
   let emitPlayerObj = gameObj.playersMap.get(socketId);
 
-  if (emitPlayerObj.missilesMany <= 0) return; // ミサイルが無いので撃てない
-  if (emitPlayerObj.isAlive === false) return; // プレイヤーが死んでいるので撃てない
+  if (emitPlayerObj.missilesMany <= 0) return; // 撃てないやん
+  if (emitPlayerObj.isAlive === false) return; // 死んでるやんけ
 
   emitPlayerObj.missilesMany -= 1;
-  const missileId = Math.floor(Math.random() * 100000) + ',' +
-    socketId + ',' +
-    emitPlayerObj.x + ',' +
-    emitPlayerObj.y;
+  const missileId = Math.floor(Math.random() * 100000) + ',' + socketId + ',' + emitPlayerObj.x + ',' + emitPlayerObj.y;
 
   const missileObj = {
     emitPlayerId: emitPlayerObj.playerId,
@@ -285,6 +281,7 @@ function missileEmit(socketId, direction) {
     x: emitPlayerObj.x,
     y: emitPlayerObj.y,
     aliveFlame: gameObj.missileAliveFlame,
+    direction: direction,
     id: missileId
   };
   gameObj.flyingMissilesMap.set(missileId, missileObj);
